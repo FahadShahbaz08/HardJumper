@@ -568,7 +568,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 71d4d25d992f56344be60b85e45a4256, type: 3}
   m_Resource: {fileID: 8300000, guid: 71d4d25d992f56344be60b85e45a4256, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -6489,6 +6489,7 @@ MonoBehaviour:
   playerChild: {fileID: 7567100283986574826}
   pauseGo: {fileID: 1496067050}
   coinSounds: {fileID: 110686325}
+  capCollider: {fileID: 910012670}
 --- !u!136 &910012670
 CapsuleCollider:
   m_ObjectHideFlags: 0
