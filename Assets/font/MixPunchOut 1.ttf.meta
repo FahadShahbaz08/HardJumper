@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 35ff25d56b63a47499ba0d4858b2a6f0
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: MixPunchOut
+  fontNames:
+  - MixPunchOut
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: b324cd9b070a34547b87b38381be1a31, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,27 @@
+fileFormatVersion: 2
+guid: 2b1f64c2c7b3cb846aaab06098eccf01
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: GoGoPosterPunch
+  fontNames:
+  - GoGoPosterPunch
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: e3b61811bd609364ca2c4de953acd422, type: 3}
+  - {fileID: 12800000, guid: 0e038692cc8e06e419810857fd1ad5f8, type: 3}
+  - {fileID: 12800000, guid: 364c20bc567314146a627b19fe6fa006, type: 3}
+  - {fileID: 12800000, guid: 1abbd6adc29baf44aa00ab4f460a961b, type: 3}
+  - {fileID: 12800000, guid: 4d22d38f823787543a64c1df380aab2e, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

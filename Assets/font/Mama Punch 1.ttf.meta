@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 7eb056f3bcf12b54daf95b9d87626859
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Mama Punch
+  fontNames:
+  - Mama Punch
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 4b809dad858984c4e8c99f94035405d8, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

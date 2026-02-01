@@ -1,0 +1,27 @@
+fileFormatVersion: 2
+guid: ae6f768731c0c55489fc2f70899cefd1
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: punch it PGS
+  fontNames:
+  - punch it PGS
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 1ce1eb156ddd8ad4ebc57227babeed04, type: 3}
+  - {fileID: 12800000, guid: f948a8752a2179344a80d850f36081b1, type: 3}
+  - {fileID: 12800000, guid: 48ad52067530eae4ea4153dee964bdef, type: 3}
+  - {fileID: 12800000, guid: c36cfadaeb0293743a42a668aefe86f8, type: 3}
+  - {fileID: 12800000, guid: 08b4deefe4fbf114bab2ae52d0afe533, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
