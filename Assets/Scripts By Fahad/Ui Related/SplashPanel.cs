@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 using UnityEngine.UI;
 
-namespace Fahad.UI
+namespace HardRunner.UI
 {
     public class SplashPanel : MonoBehaviour
     {

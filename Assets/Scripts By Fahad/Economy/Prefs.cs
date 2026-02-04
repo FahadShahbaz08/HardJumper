@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Fahad.Economy
+namespace HardRunner.Economy
 {
     public static class Prefs
     {
@@ -28,14 +28,17 @@ namespace Fahad.Economy
             }
         }
 
-        public static int LevelsUnlocked
+        static string EnvLevelKey(string env) => $"Env_{env}_Unlocked";
+
+        public static int GetUnlockedLevels(string env)
         {
-            get => PlayerPrefs.GetInt(LevelsUnlockedKey, 1); // default 1st level unlocked
-            set
-            {
-                PlayerPrefs.SetInt(LevelsUnlockedKey, value);
-                PlayerPrefs.Save();
-            }
+            return PlayerPrefs.GetInt(EnvLevelKey(env), 1);
+        }
+
+        public static void SetUnlockedLevels(string env, int value)
+        {
+            PlayerPrefs.SetInt(EnvLevelKey(env), value);
+            PlayerPrefs.Save();
         }
 
     }
