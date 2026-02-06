@@ -41,15 +41,25 @@ namespace HardRunner.UI
 
         IEnumerator LoadScene(string sceneName)
         {
-            Time.timeScale = 1.0f;
+            Time.timeScale = 1f;
+
             AsyncOperation async = SceneManager.LoadSceneAsync(sceneName);
-            async.allowSceneActivation = true;
+            async.allowSceneActivation = false;
 
             while (!async.isDone)
             {
-                loadingBar.value = async.progress;
+                float progress = Mathf.Clamp01(async.progress / 0.9f);
+                loadingBar.value = progress * 100f;
+
+                if (progress >= 1f)
+                {
+                    loadingBar.value = 100f;
+                    async.allowSceneActivation = true;
+                }
+
                 yield return null;
             }
         }
+
     }
 }
