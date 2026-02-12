@@ -16,6 +16,7 @@ namespace HardRunner.UI
         [SerializeField] GameObject leaderBoardPanel;
         [SerializeField] GameObject exitGamePanel;
         [SerializeField] GameObject settingsPanel;
+        [SerializeField] SplashPanel splashPanel;
 
         [Header("Environement Selection Ui Components")]
         [SerializeField] TextMeshProUGUI envPanelHeaderText;
@@ -28,6 +29,16 @@ namespace HardRunner.UI
         [SerializeField] List<EnvironementItemScriptable> envItemScriptables;
 
         EnvironementItemScriptable currentEnv;
+
+        private void Start()
+        {
+            if (envItemScriptables.Count > 0)
+            {
+                string firstEnv = envItemScriptables[0].environmentCategory;
+                Prefs.UnlockEnvironment(firstEnv);
+            }
+        }
+
         public void ShowEnvPanel()
         {
             environementPanel.SetActive(true);
@@ -60,26 +71,49 @@ namespace HardRunner.UI
 
         private void SetupEnvScrollViewContent()
         {
-            foreach(Transform item in evnScrollviewContent)
+            foreach (Transform item in evnScrollviewContent)
             {
                 Destroy(item.gameObject);
             }
 
-            foreach (var item in envItemScriptables)
+            for (int index = 0; index < envItemScriptables.Count; index++)
             {
+                var item = envItemScriptables[index];
+
                 GameObject obj = Instantiate(envItem.gameObject, evnScrollviewContent);
                 EnvironmentItem newItem = obj.GetComponent<EnvironmentItem>();
 
                 newItem.bgImage.sprite = item.environmentImage;
                 newItem.categoryNameText.text = item.environmentCategory;
 
-                newItem.btn.onClick.AddListener(() =>
+                bool isFirstEnv = index == 0;
+                bool isUnlocked = isFirstEnv || Prefs.IsEnvironmentUnlocked(item.environmentCategory);
+
+                newItem.lockImage.SetActive(!isUnlocked);
+                newItem.unlockCostText.text = item.unlockCost.ToString();
+                newItem.btn.interactable = true;
+
+                newItem.btn.onClick.RemoveAllListeners();
+
+                if (isUnlocked)
                 {
-                    currentEnv = item;
-                    OpenLevelsPanel();
-                });
+                    newItem.btn.onClick.AddListener(() =>
+                    {
+                        currentEnv = item;
+                        OpenLevelsPanel();
+                    });
+                }
+                else
+                {
+                    newItem.btn.onClick.AddListener(() =>
+                    {
+                        TryUnlockEnvironment(item);
+                    });
+                }
             }
+
         }
+
 
         private void OpenLevelsPanel()
         {
@@ -109,9 +143,27 @@ namespace HardRunner.UI
                 li.btn.onClick.AddListener(() =>
                 {
                     HardRunner.Managers.LevelManager.SetLevel(currentEnv.environmentCategory, levelIndex);
-                    SceneManager.LoadScene("GameScene");
+                    //SceneManager.LoadScene(currentEnv.sceneName);
+                    splashPanel.gameObject.SetActive(true);
+                    splashPanel.LoadSceneByName(currentEnv.sceneName);
                 });
             }
         }
+
+        private void TryUnlockEnvironment(EnvironementItemScriptable env)
+        {
+            if (Prefs.Coins >= env.unlockCost)
+            {
+                Prefs.Coins -= env.unlockCost;
+                Prefs.UnlockEnvironment(env.environmentCategory);
+
+                SetupEnvScrollViewContent(); // Refresh UI
+            }
+            else
+            {
+                Debug.Log("Not enough coins!");
+            }
+        }
+
     }
 }

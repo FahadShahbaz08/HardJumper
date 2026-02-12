@@ -43,23 +43,30 @@ namespace HardRunner.UI
         {
             Time.timeScale = 1f;
 
+            loadingBar.value = 0;
+
             AsyncOperation async = SceneManager.LoadSceneAsync(sceneName);
             async.allowSceneActivation = false;
 
-            while (!async.isDone)
+            while (async.progress < 0.9f)
             {
-                float progress = Mathf.Clamp01(async.progress / 0.9f);
-                loadingBar.value = progress * 100f;
-
-                if (progress >= 1f)
-                {
-                    loadingBar.value = 100f;
-                    async.allowSceneActivation = true;
-                }
+                float progress = (async.progress / 0.9f) * 100f;
+                loadingBar.value = progress;
 
                 yield return null;
             }
+
+            while (loadingBar.value < 100f)
+            {
+                loadingBar.value += Time.deltaTime * 200f;
+                yield return null;
+            }
+
+            loadingBar.value = 100f;
+
+            async.allowSceneActivation = true;
         }
+
 
     }
 }

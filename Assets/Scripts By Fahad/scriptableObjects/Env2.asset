@@ -15,3 +15,5 @@ MonoBehaviour:
   environmentCategory: Desert
   environmentImage: {fileID: 21300000, guid: fa8df45bd488ee84bbbd9e2e9d993f46, type: 3}
   maxLevels: 2
+  unlockCost: 0
+  sceneName: World_1

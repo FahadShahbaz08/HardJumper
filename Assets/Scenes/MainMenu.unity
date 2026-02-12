@@ -3429,7 +3429,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &200867552
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3447,6 +3447,7 @@ MonoBehaviour:
   leaderBoardPanel: {fileID: 1933619942}
   exitGamePanel: {fileID: 1131090959}
   settingsPanel: {fileID: 1157207753}
+  splashPanel: {fileID: 1774672177}
   envPanelHeaderText: {fileID: 306062077}
   envItem: {fileID: 6741942186496736545, guid: 29d2e8c8616009a4da7f9e140ea5b9be, type: 3}
   levelItem: {fileID: 1144699412831542875, guid: 69fcc4e03123957418822cd6b84e319f,

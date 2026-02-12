@@ -11,5 +11,11 @@ namespace HardRunner.Scriptable
         public Sprite environmentImage;
 
         public int maxLevels = 0;
+
+        [Header("Unlock Settings")]
+        public int unlockCost;
+
+        [Header("Scene Settings")]
+        public string sceneName;
     }
 }

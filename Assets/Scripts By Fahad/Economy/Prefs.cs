@@ -40,6 +40,19 @@ namespace HardRunner.Economy
             PlayerPrefs.SetInt(EnvLevelKey(env), value);
             PlayerPrefs.Save();
         }
+        static string EnvUnlockKey(string env) => $"Env_{env}_Unlocked";
+
+        public static bool IsEnvironmentUnlocked(string env)
+        {
+            return PlayerPrefs.GetInt(EnvUnlockKey(env), 0) == 1;
+        }
+
+
+        public static void UnlockEnvironment(string env)
+        {
+            PlayerPrefs.SetInt(EnvUnlockKey(env), 1);
+            PlayerPrefs.Save();
+        }
 
     }
 }
