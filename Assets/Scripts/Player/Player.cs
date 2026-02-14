@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using HardRunner.Managers;
+using UnityEditor.Rendering.LookDev;
 
 public class Player : MonoBehaviour
 {
@@ -40,7 +41,8 @@ public class Player : MonoBehaviour
     private float targetXPosition;
     private float horizontalSpeed = 10f;
 
-    public GameSceneUiManager gameSceneUiManager;
+    private GameSceneUiManager gameSceneUiManager;
+    private CameraShake camShake;
     // Start is called before the first frame update
     void Start()
     {
@@ -63,6 +65,7 @@ public class Player : MonoBehaviour
         targetXPosition = transform.position.x;
 
         gameSceneUiManager = FindAnyObjectByType<GameSceneUiManager>();
+        camShake = Camera.main.GetComponent<CameraShake>();
     }
 
 
@@ -220,6 +223,7 @@ public class Player : MonoBehaviour
 
             playerActive = false;
             Destroy(this.playerChild);
+            StartCoroutine(camShake.Shake(0.5f, 0.35f));
 
             StartCoroutine(showDeathMenu());
         }

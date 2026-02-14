@@ -7041,7 +7041,6 @@ MonoBehaviour:
   pauseGo: {fileID: 1496067050}
   coinSounds: {fileID: 110686325}
   capCollider: {fileID: 910012670}
-  gameSceneUiManager: {fileID: 0}
 --- !u!136 &910012670
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -7079,6 +7078,7 @@ GameObject:
   - component: {fileID: 963194229}
   - component: {fileID: 963194231}
   - component: {fileID: 224234384732429694}
+  - component: {fileID: 224234384732429695}
   m_Layer: 8
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -15185,6 +15185,18 @@ MonoBehaviour:
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
   m_AfterStackBundles: []
+--- !u!114 &224234384732429695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70cb9ba12b7565b43a17d15af855ae6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &253230244482158181
 RectTransform:
   m_ObjectHideFlags: 0
