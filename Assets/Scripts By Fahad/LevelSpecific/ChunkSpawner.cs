@@ -6,12 +6,13 @@ namespace HardRunner.Others
     public class ChunkSpawner : MonoBehaviour
     {
         [SerializeField] private LevelChunk startChunk;
+        [SerializeField] private GameObject endChunk;
         [SerializeField] private LevelChunk[] levelChunks;
         [SerializeField] LevelChunksHandler chunksHandler;
 
         private float spawnZ;
         int currentLevel = 1;
-        int minimumLevelChunks = 10;
+        int minimumLevelChunks = 2;
         int chunksMultiplier = 2;
 
         private LevelChunk lastChunk;
@@ -38,6 +39,10 @@ namespace HardRunner.Others
                 spawnZ -= newChunk.GetLength();
                 lastChunk = newChunk;
             }
+
+            GameObject end = Instantiate(endChunk);
+            end.transform.position = new Vector3(0, 0, spawnZ);
+
         }
     }
 }

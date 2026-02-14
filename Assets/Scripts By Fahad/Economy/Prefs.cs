@@ -7,7 +7,8 @@ namespace HardRunner.Economy
         private const string CoinsKey = "Coins";
         private const string DeathsKey = "Deaths";
         private const string LevelsUnlockedKey = "LevelsUnlocked";
-
+        static string EnvLevelKey(string env) => $"Env_{env}_LevelsUnlocked";
+        static string EnvUnlockKey(string env) => $"Env_{env}_EnvironmentUnlocked";
         public static int Coins
         {
             get => PlayerPrefs.GetInt(CoinsKey, 0);
@@ -28,7 +29,6 @@ namespace HardRunner.Economy
             }
         }
 
-        static string EnvLevelKey(string env) => $"Env_{env}_Unlocked";
 
         public static int GetUnlockedLevels(string env)
         {
@@ -40,7 +40,6 @@ namespace HardRunner.Economy
             PlayerPrefs.SetInt(EnvLevelKey(env), value);
             PlayerPrefs.Save();
         }
-        static string EnvUnlockKey(string env) => $"Env_{env}_Unlocked";
 
         public static bool IsEnvironmentUnlocked(string env)
         {

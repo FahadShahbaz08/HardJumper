@@ -148,6 +148,9 @@ namespace HardRunner.UI
                     splashPanel.LoadSceneByName(currentEnv.sceneName);
                 });
             }
+
+            Debug.Log("Unlocked levels: " + Prefs.GetUnlockedLevels(currentEnv.environmentCategory));
+
         }
 
         private void TryUnlockEnvironment(EnvironementItemScriptable env)

@@ -22,5 +22,10 @@ namespace HardRunner.Managers
                 Prefs.SetUnlockedLevels(CurrentEnvironment, CurrentLevel + 1);
             }
         }
+
+        public static void NextLevel()
+        {
+            CurrentLevel++;
+        }
     }
 }

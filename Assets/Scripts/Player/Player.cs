@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using HardRunner.Managers;
 
 public class Player : MonoBehaviour
 {
@@ -38,6 +39,8 @@ public class Player : MonoBehaviour
     public CapsuleCollider capCollider;
     private float targetXPosition;
     private float horizontalSpeed = 10f;
+
+    public GameSceneUiManager gameSceneUiManager;
     // Start is called before the first frame update
     void Start()
     {
@@ -58,6 +61,8 @@ public class Player : MonoBehaviour
         totalScore = 0;
 
         targetXPosition = transform.position.x;
+
+        gameSceneUiManager = FindAnyObjectByType<GameSceneUiManager>();
     }
 
 
@@ -218,7 +223,16 @@ public class Player : MonoBehaviour
 
             StartCoroutine(showDeathMenu());
         }
+        if(coll.gameObject.tag == "end")
+        {
+            Camera.main.GetComponent<CameraFollow>().enabled = false;
 
+            playerActive = false;
+            Destroy(this.playerChild);
+            
+            HardRunner.Managers.LevelManager.CompleteLevel();
+            gameSceneUiManager.LevelComplete();
+        }
     }
 
 
@@ -271,7 +285,7 @@ public class Player : MonoBehaviour
     IEnumerator showDeathMenu()
     {
         yield return new WaitForSeconds(1.2f);
-      UIManager.instance.ShowRestartMenu();
+        gameSceneUiManager.GameOver();
 
     }
 
