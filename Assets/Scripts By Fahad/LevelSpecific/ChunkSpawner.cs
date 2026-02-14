@@ -5,44 +5,69 @@ namespace HardRunner.Others
 {
     public class ChunkSpawner : MonoBehaviour
     {
-        [SerializeField] private LevelChunk startChunk;
+        [SerializeField] private GameObject startChunk;
         [SerializeField] private GameObject endChunk;
-        [SerializeField] private LevelChunk[] levelChunks;
+        [SerializeField] private GameObject[] levelChunks;
         [SerializeField] LevelChunksHandler chunksHandler;
+
+        [Header("Settings")]
+        [SerializeField] private float defaultChunkLength = 47.8f;
 
         private float spawnZ;
         int currentLevel = 1;
         int minimumLevelChunks = 2;
         int chunksMultiplier = 2;
 
-        private LevelChunk lastChunk;
-
         void Start()
         {
             currentLevel = Managers.LevelManager.CurrentLevel;
 
-            lastChunk = startChunk;
-            spawnZ = lastChunk.transform.position.z + lastChunk.GetLength();
+            float startLength = GetChunkLength(startChunk);
+
+            // startChunk ke FRONT edge se spawn start karein
+            spawnZ = startChunk.transform.position.z + startLength / 2f;
 
             SpawnChunk();
         }
 
+
         private void SpawnChunk()
         {
-            for (int i = 0; i < minimumLevelChunks * chunksMultiplier; i++)
-            {
-                LevelChunk newChunk = Instantiate(levelChunks[Random.Range(0, levelChunks.Length)]);
+            int totalChunks = minimumLevelChunks * chunksMultiplier;
 
-                Vector3 pos = new Vector3(0, 0, spawnZ);
-                newChunk.transform.position = pos;
-                chunksHandler.HandleChunk(newChunk);
-                spawnZ -= newChunk.GetLength();
-                lastChunk = newChunk;
+            for (int i = 0; i < totalChunks; i++)
+            {
+                GameObject chunkPrefab = levelChunks[Random.Range(0, levelChunks.Length)];
+
+                float chunkLength = GetChunkLength(chunkPrefab);
+
+                // center position set karein
+                float chunkCenterZ = spawnZ + chunkLength / 2f;
+
+                GameObject newChunk = Instantiate(chunkPrefab, new Vector3(0, 0, chunkCenterZ), Quaternion.identity);
+
+                // next spawn point update karein
+                spawnZ += chunkLength;
             }
 
-            GameObject end = Instantiate(endChunk);
-            end.transform.position = new Vector3(0, 0, spawnZ);
+            float endLength = GetChunkLength(endChunk);
 
+            float endCenterZ = spawnZ + endLength / 2f;
+
+            Instantiate(endChunk, new Vector3(0, 0, endCenterZ), Quaternion.identity);
         }
+
+
+        private float GetChunkLength(GameObject chunk)
+        {
+            Renderer renderer = chunk.GetComponentInChildren<Renderer>();
+
+            if (renderer != null)
+                return renderer.bounds.size.z;
+
+            return defaultChunkLength;
+        }
+
+
     }
 }

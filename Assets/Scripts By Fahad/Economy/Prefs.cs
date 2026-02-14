@@ -9,6 +9,9 @@ namespace HardRunner.Economy
         private const string LevelsUnlockedKey = "LevelsUnlocked";
         static string EnvLevelKey(string env) => $"Env_{env}_LevelsUnlocked";
         static string EnvUnlockKey(string env) => $"Env_{env}_EnvironmentUnlocked";
+
+        private const string MusicKey = "MusicEnabled";
+        private const string SfxKey = "SfxEnabled";
         public static int Coins
         {
             get => PlayerPrefs.GetInt(CoinsKey, 0);
@@ -51,6 +54,26 @@ namespace HardRunner.Economy
         {
             PlayerPrefs.SetInt(EnvUnlockKey(env), 1);
             PlayerPrefs.Save();
+        }
+
+        public static bool MusicEnabled
+        {
+            get => PlayerPrefs.GetInt(MusicKey, 1) == 1;
+            set
+            {
+                PlayerPrefs.SetInt(MusicKey, value ? 1 : 0);
+                PlayerPrefs.Save();
+            }
+        }
+
+        public static bool SfxEnabled
+        {
+            get => PlayerPrefs.GetInt(SfxKey, 1) == 1;
+            set
+            {
+                PlayerPrefs.SetInt(SfxKey, value ? 1 : 0);
+                PlayerPrefs.Save();
+            }
         }
 
     }

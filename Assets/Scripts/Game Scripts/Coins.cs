@@ -28,7 +28,7 @@ public class Coins : MonoBehaviour
         {
 
 
-            coinSounds.GetComponentInChildren<CoinSounds>().getCoinSound();
+            //coinSounds.GetComponentInChildren<CoinSounds>().getCoinSound();
 
             //scoremanager.GetComponent<ScoreManager>().AddCoins(intCoinsToAdd);
             ScoreManager.AddCoins(intCoinsToAdd);

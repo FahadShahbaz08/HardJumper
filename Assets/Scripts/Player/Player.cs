@@ -4,13 +4,23 @@ using UnityEngine;
 using UnityEngine.UI;
 using HardRunner.Managers;
 using UnityEditor.Rendering.LookDev;
+using Solo.MOST_IN_ONE;
+using System;
+using UnityEngine.EventSystems;
 
 public class Player : MonoBehaviour
 {
 
     private CharacterController controller;
     private Vector3 direction;
-    public float forwardSpeed;
+    [SerializeField] private float forwardSpeed;
+
+    [SerializeField] private float startSpeed = 8f;
+    [SerializeField] private float maxSpeed = 20f;
+    [SerializeField] private float acceleration = 0.5f;
+
+    private float currentSpeed;
+
 
     public int jumpCount, totalScore;
     public bool playerActive = false;
@@ -27,11 +37,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     GameObject playerChild;
 
-    SavingManager savingManager;
 
     public GameObject pauseGo;
-
-    public GameObject coinSounds;
     private Vector2 startTouchPosition, endTouchPosition;
 
     float HInput;
@@ -43,18 +50,18 @@ public class Player : MonoBehaviour
 
     private GameSceneUiManager gameSceneUiManager;
     private CameraShake camShake;
+
+    public bool isJumping = false;
+
+
     // Start is called before the first frame update
     void Start()
     {
-        savingManager = GetComponent<SavingManager>();
-        savingManager = FindObjectOfType<SavingManager>();
         //RunTrigger
         characterRGBD = GetComponent<Rigidbody>();
         playerChild = GameObject.Find("PlayerChild");
         anim.SetTrigger("IdleTriggerBoy");
 
-        //FOR JUMP SOUND
-        coinSounds = GameObject.Find("SoundsGO");
 
         //pauseGo = GameObject.Find("PauseGO");
 
@@ -66,6 +73,10 @@ public class Player : MonoBehaviour
 
         gameSceneUiManager = FindAnyObjectByType<GameSceneUiManager>();
         camShake = Camera.main.GetComponent<CameraShake>();
+
+        currentSpeed = startSpeed;
+
+        AudioManager.Instance.PlayRandomGameplaySound();
     }
 
 
@@ -88,22 +99,24 @@ public class Player : MonoBehaviour
     }
     void HandleScoreAndSpeed()
     {
+        // score update
         scoreTimer += Time.deltaTime;
         if (scoreTimer >= 0.33f)
         {
             totalScore++;
-            GameObject.Find("Score").GetComponent<Text>().text = totalScore.ToString();
+            //GameObject.Find("Score").GetComponent<Text>().text = totalScore.ToString();
             scoreTimer = 0;
         }
 
-        if (totalScore >= 800) forwardSpeed = -12f;
-        else if (totalScore >= 600) forwardSpeed = -11.5f;
-        else if (totalScore >= 400) forwardSpeed = -11f;
-        else if (totalScore >= 200) forwardSpeed = -10f;
-        else if (totalScore >= 150) forwardSpeed = -9.5f;
-        else if (totalScore >= 100) forwardSpeed = -9f;
-        else if (totalScore >= 50) forwardSpeed = -8.5f;
+        // speed increase every frame
+        if (currentSpeed > maxSpeed)
+        {
+            currentSpeed += acceleration * Time.deltaTime;
+        }
+
+        forwardSpeed = currentSpeed;
     }
+
     void HandleForwardMovement()
     {
         characterRGBD.linearVelocity = new Vector3(
@@ -116,6 +129,11 @@ public class Player : MonoBehaviour
     }
     void HandleTouchInput()
     {
+
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
+
+
 #if UNITY_EDITOR
         if (Input.GetMouseButtonDown(0))
             startTouchPosition = Input.mousePosition;
@@ -160,7 +178,7 @@ public class Player : MonoBehaviour
         // HORIZONTAL
         else
         {
-            if (delta.x < 0)
+            if (delta.x > 0)
             {
                 // Swipe Right → Move Right
                 if (targetXPosition < 1.75f - 0.385f)
@@ -180,14 +198,14 @@ public class Player : MonoBehaviour
 
     public void characterDuck()
     {
-        if (isSliding) return;
-        print("sliding");
-        isSliding = true;
-        anim.SetTrigger("SlideTriggerBoy");
+        //if (isSliding) return;
+        //print("sliding");
+        //isSliding = true;
+        //anim.SetTrigger("SlideTriggerBoy");
 
-        capCollider.height = capCollider.height / 2f;
+        //capCollider.height = capCollider.height / 2f;
 
-        StartCoroutine(StopSlide());
+        //StartCoroutine(StopSlide());
     }
     IEnumerator StopSlide()
     {
@@ -203,19 +221,20 @@ public class Player : MonoBehaviour
         if (coll.gameObject.tag == "ground")
         {
             jumpCount = 1;
-            //isCrouch = true;
+            isJumping = false;
+            AudioManager.Instance.PlayJumpSound();
 
-            //Debug.Log("GROUND!!!");
+            if (anim != null)
+                anim.SetBool("Jump", false);
+
         }
 
         if (coll.gameObject.tag == "death")
         {
-            savingManager.SaveCoins();
-            savingManager.Deaths();
 
             pauseGo.active = false;
 
-            coinSounds.GetComponentInChildren<CoinSounds>().deathSound();
+            //coinSounds.GetComponentInChildren<CoinSounds>().deathSound();
             Instantiate(deathParticle, transform.position, Quaternion.Euler(90, 0, 0)); // FIX
             //Instantiate(deathParticle, characterPos, Quaternion.Euler(90, 0, 0));
 
@@ -224,11 +243,13 @@ public class Player : MonoBehaviour
             playerActive = false;
             Destroy(this.playerChild);
             StartCoroutine(camShake.Shake(0.5f, 0.35f));
-
+            AudioManager.Instance.StopMusic();
+            AudioManager.Instance.PlayDeathSound();
             StartCoroutine(showDeathMenu());
         }
         if(coll.gameObject.tag == "end")
         {
+            MOST_HapticFeedback.Generate(MOST_HapticFeedback.HapticTypes.HeavyImpact);
             Camera.main.GetComponent<CameraFollow>().enabled = false;
 
             playerActive = false;
@@ -236,6 +257,8 @@ public class Player : MonoBehaviour
             
             HardRunner.Managers.LevelManager.CompleteLevel();
             gameSceneUiManager.LevelComplete();
+
+            AudioManager.Instance.StopMusic();
         }
     }
 
@@ -251,35 +274,19 @@ public class Player : MonoBehaviour
 
     void characterJump()
     {
+        if (jumpCount > 3) return;
 
-        if (jumpCount == 1)
-        {
-            //characterSpeaker.PlayOneShot(vars.jumpSound);
-            characterRGBD.linearVelocity = new Vector3(characterRGBD.linearVelocity.x, 10f, characterRGBD.linearVelocity.z);
-            //characterRGBD.AddForce(Vector3.up * 400, ForceMode.Impulse);
-            coinSounds.GetComponentInChildren<CoinSounds>().jumpSound();
+        characterRGBD.linearVelocity = new Vector3(characterRGBD.linearVelocity.x, 10f, characterRGBD.linearVelocity.z);
+        isJumping = true;
 
-            StartCoroutine(startWalkAnim(jumpCount));
-        }
-        else if (jumpCount == 2)
-        {
-            //characterSpeaker.PlayOneShot(vars.jumpSound);
-            characterRGBD.linearVelocity = new Vector3(characterRGBD.linearVelocity.x, 10f, characterRGBD.linearVelocity.z);
-            //characterRGBD.AddForce(Vector3.up * 500, ForceMode.Impulse);
-            coinSounds.GetComponentInChildren<CoinSounds>().jumpSound();
-            StartCoroutine(startWalkAnim(jumpCount));
-        }
+        if (anim != null)
+            anim.SetBool("Jump", true);
 
-        else if (jumpCount == 3)
-        {
-            //characterSpeaker.PlayOneShot(vars.jumpSound);
-            characterRGBD.linearVelocity = new Vector3(characterRGBD.linearVelocity.x, 10f, characterRGBD.linearVelocity.z);
-            //characterRGBD.AddForce(Vector3.up * 500, ForceMode.Impulse);
-            coinSounds.GetComponentInChildren<CoinSounds>().jumpSound();
-            StartCoroutine(startWalkAnim(jumpCount));
-        }
+        StartCoroutine(startWalkAnim(jumpCount));
+
         jumpCount++;
     }
+
 
     public IEnumerator startWalkAnim(int count)
     {

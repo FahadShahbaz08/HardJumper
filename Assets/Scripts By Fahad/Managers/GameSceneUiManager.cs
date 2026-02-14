@@ -7,7 +7,9 @@ namespace HardRunner.Managers
         [SerializeField] GameObject gameoverPanel;
         [SerializeField] GameObject levelCompletePanel;
         [SerializeField] GameObject pausePanel;
+        [SerializeField] GameObject hudPanel;
 
+        [SerializeField] Player player;
         public void LevelComplete()
         {
             levelCompletePanel.SetActive(true);
@@ -49,7 +51,11 @@ namespace HardRunner.Managers
             Scene scene = SceneManager.GetActiveScene();
             SceneManager.LoadScene(scene.name);
         }
-
+        public void StartGame()
+        {
+            hudPanel.SetActive(true );
+            player.playerActive = true;
+        }
 
     }
 }

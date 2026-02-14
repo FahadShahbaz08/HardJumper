@@ -10,15 +10,15 @@ namespace HardRunner.Managers
 
         public void HandleChunk(LevelChunk chunk)
         {
-            foreach (var point in chunk.middleRowPoints)
-            {
-                float r = Random.value;
+            //foreach (var point in chunk.middleRowPoints)
+            //{
+            //    float r = Random.value;
 
-                if (r < 0.4f)
-                    SpawnObstacle(chunk, point);
-                else if (r < 0.7f)
-                    SpawnCoins(chunk, point);
-            }
+            //    if (r < 0.4f)
+            //        SpawnObstacle(chunk, point);
+            //    else if (r < 0.7f)
+            //        SpawnCoins(chunk, point);
+            //}
         }
 
         void SpawnObstacle(LevelChunk chunk, Transform point)
