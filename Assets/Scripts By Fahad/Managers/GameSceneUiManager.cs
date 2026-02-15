@@ -28,6 +28,7 @@ namespace HardRunner.Managers
 
         public void Home()
         {
+            Time.timeScale = 1f;
             SceneManager.LoadScene("MainMenu");
         }
 
