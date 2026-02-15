@@ -20,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Levels/World_2.unity
     guid: 5a09029d78ad7384c8ba1f0803da251e
+  - enabled: 1
+    path: Assets/Scenes/Levels/World_3.unity
+    guid: 55e9625205b0e8a458b3261978b92d91
   - enabled: 0
     path: Assets/Scenes/Levels/Fields_med.unity
     guid: a996580ae4620454b8b6c2dc8f705a2a

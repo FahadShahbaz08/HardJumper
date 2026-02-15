@@ -9,7 +9,7 @@ namespace HardRunner.Others
         [SerializeField] private GameObject endChunk;
         [SerializeField] private GameObject[] levelChunks;
         [SerializeField] LevelChunksHandler chunksHandler;
-
+        [SerializeField] float thresHold = 0f;
         [Header("Settings")]
         [SerializeField] private float defaultChunkLength = 47.8f;
 
@@ -63,7 +63,7 @@ namespace HardRunner.Others
             Renderer renderer = chunk.GetComponentInChildren<Renderer>();
 
             if (renderer != null)
-                return renderer.bounds.size.z;
+                return renderer.bounds.size.z - thresHold;
 
             return defaultChunkLength;
         }
