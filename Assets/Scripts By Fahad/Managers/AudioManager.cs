@@ -28,6 +28,8 @@ namespace HardRunner.Managers {
 
             musicSource.mute = !HardRunner.Economy.Prefs.MusicEnabled;
             sfxSource.mute = !HardRunner.Economy.Prefs.SfxEnabled;
+
+            Invoke(nameof(PlayMainMenuMusic), 1f);
         }
 
         public void PlayMainMenuMusic()

@@ -53,6 +53,9 @@ public class Player : MonoBehaviour
 
     public bool isJumping = false;
 
+    [SerializeField] ParticleSystem coinVfx;
+    [SerializeField] float coinVfxDuration = 0.5f;
+
 
     // Start is called before the first frame update
     void Start()
@@ -78,7 +81,14 @@ public class Player : MonoBehaviour
 
         AudioManager.Instance.PlayRandomGameplaySound();
     }
-
+    private void OnEnable()
+    {
+        GameEventManager.OnCoinCollect += PlayCoinPickupVfx;
+    }
+    private void OnDisable()
+    {
+        GameEventManager.OnCoinCollect -= PlayCoinPickupVfx;
+    }
 
     void Update()
     {
@@ -193,8 +203,18 @@ public class Player : MonoBehaviour
 
         }
     }
-
-
+    private void PlayCoinPickupVfx()
+    {
+        StopCoroutine(HandleCoinVfx());
+        StartCoroutine(HandleCoinVfx());
+    }
+    IEnumerator HandleCoinVfx()
+    {
+        coinVfx.gameObject.SetActive(true);
+        coinVfx.Play();
+        yield return new WaitForSeconds(coinVfxDuration);
+        coinVfx.gameObject.SetActive(false);
+    }
 
     public void characterDuck()
     {
