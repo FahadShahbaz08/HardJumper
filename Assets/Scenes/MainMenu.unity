@@ -8274,16 +8274,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainMenuBgMusic: {fileID: 8300000, guid: 63e2d732badada7439c476ac14746617, type: 3}
-  jumpSound: {fileID: 8300000, guid: dc2be2b8403147048afacf51d0176219, type: 3}
-  coinPickSound: {fileID: 8300000, guid: fc44ccc7dcf850e4bbddef437b52ffb3, type: 3}
-  deathSound: {fileID: 8300000, guid: 542ed7a53d527f8478014c6c91c79032, type: 3}
-  gamePlaySound:
+  gamePlayMusic:
   - {fileID: 8300000, guid: 63e2d732badada7439c476ac14746617, type: 3}
   - {fileID: 8300000, guid: 5b728ca468884df46bea6e8d1d74c2e7, type: 3}
   - {fileID: 8300000, guid: b470432d7ce59ed4db71697500c86e9e, type: 3}
   - {fileID: 8300000, guid: 0ce1298c28bb0430f966eb8e4e7eb211, type: 3}
   - {fileID: 8300000, guid: 1ae6cb00fbf034c30abe7027dd8066b9, type: 3}
   - {fileID: 8300000, guid: 2c60ef9f91b304c18a8c813af10a82e1, type: 3}
+  jumpSound: {fileID: 8300000, guid: dc2be2b8403147048afacf51d0176219, type: 3}
+  coinPickSound: {fileID: 8300000, guid: fc44ccc7dcf850e4bbddef437b52ffb3, type: 3}
+  deathSound: {fileID: 8300000, guid: 2c8debb416472214992a0d08b1e8601e, type: 3}
   musicSource: {fileID: 1182397966}
   sfxSource: {fileID: 1370111800}
 --- !u!1 &472221353
@@ -21511,7 +21511,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.5
+  m_Volume: 0.25
   m_Pitch: 1
   Loop: 1
   Mute: 0

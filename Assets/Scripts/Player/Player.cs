@@ -79,7 +79,8 @@ public class Player : MonoBehaviour
 
         currentSpeed = startSpeed;
 
-        AudioManager.Instance.PlayRandomGameplaySound();
+        AudioManager.Instance.PlayGameplayMusic();
+
     }
     private void OnEnable()
     {
