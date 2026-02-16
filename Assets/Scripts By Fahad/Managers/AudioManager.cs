@@ -59,6 +59,8 @@ namespace HardRunner.Managers
             musicSource.clip = mainMenuBgMusic;
             musicSource.loop = true;
             musicSource.Play();
+
+            print("Main Menu Music Plays");
         }
 
         public void PlayGameplayMusic()

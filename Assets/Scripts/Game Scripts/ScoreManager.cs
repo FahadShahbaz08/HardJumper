@@ -11,7 +11,7 @@ public class ScoreManager : MonoBehaviour
     public int intCoinsGot;
     void Start()
     {
-        uiCoinsCollected = GameObject.Find("CoinsGO").GetComponent<Text>();
+        //uiCoinsCollected = GameObject.Find("CoinsGO").GetComponent<Text>();
 
         //RESET COINS
         intCoinsCollected = 0;

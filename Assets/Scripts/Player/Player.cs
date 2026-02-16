@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using HardRunner.Managers;
-using UnityEditor.Rendering.LookDev;
 using Solo.MOST_IN_ONE;
 using System;
 using UnityEngine.EventSystems;
@@ -262,6 +261,7 @@ public class Player : MonoBehaviour
             Camera.main.GetComponent<CameraFollow>().enabled = false;
 
             playerActive = false;
+            MOST_HapticFeedback.Generate(MOST_HapticFeedback.HapticTypes.HeavyImpact);
             Destroy(this.playerChild);
             StartCoroutine(camShake.Shake(0.5f, 0.35f));
             AudioManager.Instance.StopMusic();
