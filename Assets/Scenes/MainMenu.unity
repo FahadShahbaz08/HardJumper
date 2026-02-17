@@ -14746,6 +14746,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5406216974275516204, guid: 5a6a01315a19742cd9ffe73185ff5a73,
         type: 3}
+      propertyPath: keepOpen
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5406216974275516204, guid: 5a6a01315a19742cd9ffe73185ff5a73,
+        type: 3}
       propertyPath: rewards.Array.data[0].unit
       value: Coins
       objectReference: {fileID: 0}
