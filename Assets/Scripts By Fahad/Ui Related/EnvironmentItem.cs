@@ -10,4 +10,7 @@ public class EnvironmentItem : MonoBehaviour
 
     public GameObject lockImage;
     public TextMeshProUGUI unlockCostText;
+
+    public TextMeshProUGUI buttonText;
+
 }

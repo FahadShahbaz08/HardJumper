@@ -10,6 +10,7 @@ TagManager:
   - spawnGO
   - Soundtg
   - end
+  - Coin
   layers:
   - Default
   - TransparentFX

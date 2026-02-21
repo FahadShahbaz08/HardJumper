@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15b884d14e4d9674dadeb79ddf02789c, type: 3}
   m_Name: Env2
   m_EditorClassIdentifier: 
-  environmentCategory: Desert
-  environmentImage: {fileID: 21300000, guid: fa8df45bd488ee84bbbd9e2e9d993f46, type: 3}
-  maxLevels: 2
+  environmentCategory: City
+  environmentImage: {fileID: 21300000, guid: 7fe0742253cd585428d6026c3015ec98, type: 3}
+  maxLevels: 5
   unlockCost: 0
   sceneName: World_2

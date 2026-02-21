@@ -90,7 +90,21 @@ namespace HardRunner.UI
                 bool isUnlocked = isFirstEnv || Prefs.IsEnvironmentUnlocked(item.environmentCategory);
 
                 newItem.lockImage.SetActive(!isUnlocked);
-                newItem.unlockCostText.text = item.unlockCost.ToString();
+                newItem.unlockCostText.text = "Required " + item.unlockCost + " coins to unlock this environment";
+
+
+                if (isUnlocked)
+                {
+                    newItem.buttonText.text = "Select";
+                    newItem.unlockCostText.gameObject.SetActive(false);
+                }
+                else
+                {
+                    newItem.buttonText.text = "Unlock";
+                    newItem.unlockCostText.gameObject.SetActive(true);
+                    newItem.unlockCostText.text = "Required " + item.unlockCost + " coins to unlock this environment";
+                }
+
                 newItem.btn.interactable = true;
 
                 newItem.btn.onClick.RemoveAllListeners();

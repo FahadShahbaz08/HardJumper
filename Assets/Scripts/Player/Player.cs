@@ -56,6 +56,28 @@ public class Player : MonoBehaviour
     [SerializeField] float coinVfxDuration = 0.5f;
 
 
+    // ================= POWER UPS =================
+    [Header("Power Ups")]
+
+    // Magnet
+    [SerializeField] private float magnetDuration = 8f;
+    [SerializeField] private float magnetRadiusZ = 6f;
+    [SerializeField] private float magnetRadiusX = 3f;
+    private bool magnetActive = false;
+    private float magnetTimer;
+    [SerializeField] private Slider magnetSlider;
+    [SerializeField] private GameObject magnetUI;
+
+    // Shield
+    [SerializeField] private float shieldDuration = 6f;
+    private bool shieldActive = false;
+    private float shieldTimer;
+    [SerializeField] private Slider shieldSlider;
+    [SerializeField] private GameObject shieldUI;
+
+    [SerializeField] private GameObject shieldBubble;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -80,6 +102,23 @@ public class Player : MonoBehaviour
 
         AudioManager.Instance.PlayGameplayMusic();
 
+        // Initialize powerup UI correctly
+        magnetActive = false;
+        shieldActive = false;
+
+        magnetUI.SetActive(false);
+        shieldUI.SetActive(false);
+
+        magnetSlider.minValue = 0;
+        magnetSlider.maxValue = magnetDuration;
+        magnetSlider.value = 0;
+
+        shieldSlider.minValue = 0;
+        shieldSlider.maxValue = shieldDuration;
+        shieldSlider.value = 0;
+
+        shieldBubble.SetActive(false);
+
     }
     private void OnEnable()
     {
@@ -98,6 +137,9 @@ public class Player : MonoBehaviour
         HandleForwardMovement();
         HandleTouchInput();
         HandleSmoothHorizontalMovement();
+
+        HandleMagnet();
+        HandleShield();
     }
 
     void HandleSmoothHorizontalMovement()
@@ -139,25 +181,36 @@ public class Player : MonoBehaviour
     }
     void HandleTouchInput()
     {
-
+#if UNITY_EDITOR
+        // Mouse check
         if (EventSystem.current.IsPointerOverGameObject())
             return;
 
-
-#if UNITY_EDITOR
         if (Input.GetMouseButtonDown(0))
             startTouchPosition = Input.mousePosition;
 
         if (Input.GetMouseButtonUp(0))
             ProcessSwipe(Input.mousePosition);
-#else
-    if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
-        startTouchPosition = Input.GetTouch(0).position;
 
-    if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
-        ProcessSwipe(Input.GetTouch(0).position);
+#else
+    // Touch check with fingerId
+    if (Input.touchCount > 0)
+    {
+        Touch touch = Input.GetTouch(0);
+
+        // IMPORTANT FIX
+        if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+            return;
+
+        if (touch.phase == TouchPhase.Began)
+            startTouchPosition = touch.position;
+
+        if (touch.phase == TouchPhase.Ended)
+            ProcessSwipe(touch.position);
+    }
 #endif
     }
+
     void ProcessSwipe(Vector2 endPos)
     {
         Vector2 delta = endPos - startTouchPosition;
@@ -203,6 +256,78 @@ public class Player : MonoBehaviour
 
         }
     }
+    private void ActivateMagnet()
+    {
+        magnetActive = true;
+        magnetTimer = magnetDuration;
+
+        magnetUI.SetActive(true);
+
+        magnetSlider.maxValue = magnetDuration;
+        magnetSlider.value = magnetDuration;
+    }
+    void HandleMagnet()
+    {
+        if (!magnetActive) return;
+
+        magnetTimer -= Time.deltaTime;
+        magnetTimer = Mathf.Clamp(magnetTimer, 0, magnetDuration);
+
+        magnetSlider.value = magnetTimer;
+
+        // Create invisible rectangular detection area in front of player
+        Collider[] hits = Physics.OverlapBox(
+            transform.position + new Vector3(0, 0, magnetRadiusZ / 2),
+            new Vector3(magnetRadiusX, 2f, magnetRadiusZ)
+        );
+
+        foreach (Collider hit in hits)
+        {
+            if (hit.CompareTag("Coin"))
+            {
+                // Pull coin toward player
+                hit.transform.position = Vector3.MoveTowards(
+                    hit.transform.position,
+                    transform.position,
+                    20f * Time.deltaTime
+                );
+            }
+        }
+
+        if (magnetTimer <= 0)
+        {
+            magnetActive = false;
+            magnetUI.SetActive(false);
+        }
+    }
+    private void ActivateShield()
+    {
+        shieldActive = true;
+        shieldTimer = shieldDuration;
+
+        shieldUI.SetActive(true);
+
+        shieldSlider.maxValue = shieldDuration;
+        shieldSlider.value = shieldDuration;
+
+        shieldBubble.SetActive(true);
+    }
+    void HandleShield()
+    {
+        if (!shieldActive) return;
+
+        shieldTimer -= Time.deltaTime;
+        shieldTimer = Mathf.Clamp(shieldTimer, 0, shieldDuration);
+
+        shieldSlider.value = shieldTimer;
+
+        if (shieldTimer <= 0)
+        {
+            shieldActive = false;
+            shieldUI.SetActive(false);
+            shieldBubble.SetActive(false);
+        }
+    }
     private void PlayCoinPickupVfx()
     {
         StopCoroutine(HandleCoinVfx());
@@ -242,7 +367,7 @@ public class Player : MonoBehaviour
         {
             jumpCount = 1;
             isJumping = false;
-            AudioManager.Instance.PlayJumpSound();
+            //AudioManager.Instance.PlayJumpSound();
 
             if (anim != null)
                 anim.SetBool("Jump", false);
@@ -251,7 +376,11 @@ public class Player : MonoBehaviour
 
         if (coll.gameObject.tag == "death")
         {
-
+            if (shieldActive)
+            {
+                Destroy(coll.gameObject); // break obstacle
+                return;
+            }
             pauseGo.active = false;
 
             //coinSounds.GetComponentInChildren<CoinSounds>().deathSound();
@@ -299,6 +428,7 @@ public class Player : MonoBehaviour
 
         characterRGBD.linearVelocity = new Vector3(characterRGBD.linearVelocity.x, 10f, characterRGBD.linearVelocity.z);
         isJumping = true;
+        AudioManager.Instance.PlayJumpSound();
 
         if (anim != null)
             anim.SetBool("Jump", true);

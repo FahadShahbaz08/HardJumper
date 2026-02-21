@@ -69,6 +69,7 @@ Transform:
   - {fileID: 8222667722032312122}
   - {fileID: 1615701499614602668}
   - {fileID: 2626062647511013800}
+  - {fileID: 7934030702998861865}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7649233778426435089
@@ -2901,6 +2902,80 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -8197616640007080287, guid: 7c85c5cd23056e84881d629afd953c39, type: 3}
+--- !u!1001 &6318500164800464408
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7904856960243536523}
+    m_Modifications:
+    - target: {fileID: 4158094106044137009, guid: a4e5f2046e9c8294b84b643a7702b28f,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 4158094106044137009, guid: a4e5f2046e9c8294b84b643a7702b28f,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.76
+      objectReference: {fileID: 0}
+    - target: {fileID: 4158094106044137009, guid: a4e5f2046e9c8294b84b643a7702b28f,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 21.501328
+      objectReference: {fileID: 0}
+    - target: {fileID: 4158094106044137009, guid: a4e5f2046e9c8294b84b643a7702b28f,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4158094106044137009, guid: a4e5f2046e9c8294b84b643a7702b28f,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4158094106044137009, guid: a4e5f2046e9c8294b84b643a7702b28f,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4158094106044137009, guid: a4e5f2046e9c8294b84b643a7702b28f,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4158094106044137009, guid: a4e5f2046e9c8294b84b643a7702b28f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4158094106044137009, guid: a4e5f2046e9c8294b84b643a7702b28f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4158094106044137009, guid: a4e5f2046e9c8294b84b643a7702b28f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5495487847688509202, guid: a4e5f2046e9c8294b84b643a7702b28f,
+        type: 3}
+      propertyPath: m_Name
+      value: Magnet PowerUp
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a4e5f2046e9c8294b84b643a7702b28f, type: 3}
+--- !u!4 &7934030702998861865 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4158094106044137009, guid: a4e5f2046e9c8294b84b643a7702b28f,
+    type: 3}
+  m_PrefabInstance: {fileID: 6318500164800464408}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6500812086411534403
 PrefabInstance:
   m_ObjectHideFlags: 0
