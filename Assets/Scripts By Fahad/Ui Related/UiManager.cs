@@ -5,6 +5,7 @@ using HardRunner.Scriptable;
 using System.Security.Cryptography;
 using TMPro;
 using UnityEngine.SceneManagement;
+using HardRunner.Managers;
 
 namespace HardRunner.UI
 {
@@ -47,6 +48,8 @@ namespace HardRunner.UI
             envScrollViewGo.SetActive(true);
             SetupEnvScrollViewContent();
             envPanelHeaderText.text = "Choose Map";
+
+            AudioManager.Instance.PlayUiClickSound();
         }
         public void ShowLeaderBoard()
         {
@@ -56,15 +59,40 @@ namespace HardRunner.UI
         public void ExitGame()
         {
             exitGamePanel.SetActive(true);
+            AudioManager.Instance.PlayUiClickSound();
+
+        }
+        public void HideExitPanel()
+        {
+            AudioManager.Instance.PlayUiClickSound();
         }
 
+        public void OpenDailyRewardPanel()
+        {
+            AudioManager.Instance.PlayUiClickSound();
+        }
+
+        public void HideDailyRewardPanel()
+        {
+            AudioManager.Instance.PlayUiClickSound();
+        }
         public void ShowSettingsPanel()
         {
             settingsPanel.SetActive(true);
+            AudioManager.Instance.PlayUiClickSound();
+
         }
-        
+
+        public void HideSettingPanel()
+        {
+            settingsPanel.SetActive(false);
+            AudioManager.Instance.PlayUiClickSound();
+
+        }
+
         public void ExitGameApp()
         {
+            AudioManager.Instance.PlayUiClickSound();
             Application.Quit();
         }
 
@@ -134,8 +162,9 @@ namespace HardRunner.UI
             envPanelHeaderText.text = "Choose Level";
             envScrollViewGo.SetActive(false);
             levelScrollViewGo.SetActive(true);
+            AudioManager.Instance.PlayUiClickSound();
 
-            foreach(Transform item in levelScrollViewContent)
+            foreach (Transform item in levelScrollViewContent)
             {
                 Destroy(item?.gameObject);
             }
@@ -156,10 +185,12 @@ namespace HardRunner.UI
                 int levelIndex = i;
                 li.btn.onClick.AddListener(() =>
                 {
+                    AudioManager.Instance.PlayUiClickSound();
                     HardRunner.Managers.LevelManager.SetLevel(currentEnv.environmentCategory, levelIndex);
                     //SceneManager.LoadScene(currentEnv.sceneName);
                     splashPanel.gameObject.SetActive(true);
                     splashPanel.LoadSceneByName(currentEnv.sceneName);
+
                 });
             }
 
@@ -169,6 +200,8 @@ namespace HardRunner.UI
 
         private void TryUnlockEnvironment(EnvironementItemScriptable env)
         {
+            AudioManager.Instance.PlayUiClickSound();
+
             if (Prefs.Coins >= env.unlockCost)
             {
                 Prefs.Coins -= env.unlockCost;

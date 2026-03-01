@@ -14,7 +14,6 @@ namespace HardRunner.Managers
         {
             levelCompletePanel.SetActive(true);
         }
-
         public void GameOver()
         {
             gameoverPanel.SetActive(true);
@@ -23,6 +22,7 @@ namespace HardRunner.Managers
         public void Retry()
         {
             Time.timeScale = 1f;
+            AudioManager.Instance.PlayUiClickSound();
             Scene scene = SceneManager.GetActiveScene();
             SceneManager.LoadScene(scene.name);
         }
@@ -30,11 +30,13 @@ namespace HardRunner.Managers
         public void Home()
         {
             Time.timeScale = 1f;
+            AudioManager.Instance.PlayUiClickSound();
             SceneManager.LoadScene("MainMenu");
         }
 
         public void EnablePausePanel()
         {
+            AudioManager.Instance.PlayUiClickSound();
             pausePanel.SetActive(true);
             Time.timeScale = 0;
         }
@@ -42,6 +44,7 @@ namespace HardRunner.Managers
         public void Resume()
         {
             Time.timeScale = 1;
+            AudioManager.Instance.PlayUiClickSound();
             pausePanel.SetActive(false);
         }
 
@@ -49,7 +52,7 @@ namespace HardRunner.Managers
         {
             HardRunner.Managers.LevelManager.CompleteLevel();
             HardRunner.Managers.LevelManager.NextLevel();
-
+            AudioManager.Instance.PlayUiClickSound();
             Scene scene = SceneManager.GetActiveScene();
             SceneManager.LoadScene(scene.name);
         }
@@ -57,6 +60,8 @@ namespace HardRunner.Managers
         {
             hudPanel.SetActive(true );
             player.playerActive = true;
+            AudioManager.Instance.PlayUiClickSound();
+            player.StartGame();
         }
 
     }

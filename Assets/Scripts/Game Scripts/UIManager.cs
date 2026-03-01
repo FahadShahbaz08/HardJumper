@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using HardRunner.Managers;
 public class UIManager : MonoBehaviour
 {
     [Header("UI Panels")]
@@ -57,6 +58,7 @@ public class UIManager : MonoBehaviour
 
         SafeSetActive(mainMenuUI, false);
         hudGame.SetActive(true);
+        AudioManager.Instance.PlayUiClickSound();
     }
 
     public void RestartGame()

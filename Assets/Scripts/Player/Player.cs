@@ -68,6 +68,8 @@ public class Player : MonoBehaviour
     [SerializeField] private Slider magnetSlider;
     [SerializeField] private GameObject magnetUI;
 
+    [SerializeField] private float magnetRadiusY = 15f; // height (NEW)
+    [SerializeField] private float magnetPullSpeed = 25f;
     // Shield
     [SerializeField] private float shieldDuration = 6f;
     private bool shieldActive = false;
@@ -77,6 +79,26 @@ public class Player : MonoBehaviour
 
     [SerializeField] private GameObject shieldBubble;
 
+    // ================= HIGH JUMP POWER UP =================
+    [Header("High Jump PowerUp")]
+    [SerializeField] private float highJumpForce = 18f;
+    [SerializeField] private float normalJumpForce = 10f;
+    [SerializeField] private float highJumpDuration = 5f;
+
+    private bool highJumpActive = false;
+    private float highJumpTimer = 0f;
+    private bool isGrounded = false;
+
+    [SerializeField] private Slider highJumpSlider;
+    [SerializeField] private GameObject highJumpUI;
+
+    public static Action<int> CoinsCollecd;
+
+    [SerializeField] ParticleSystem destructionParticle;
+
+    private bool gameStarted = false;
+    private bool canReadInput = false;
+    public static int CurrentRunCoins = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -119,6 +141,14 @@ public class Player : MonoBehaviour
 
         shieldBubble.SetActive(false);
 
+        highJumpActive = false;
+
+        highJumpUI.SetActive(false);
+
+        highJumpSlider.minValue = 0;
+        highJumpSlider.maxValue = highJumpDuration;
+        highJumpSlider.value = 0;
+
     }
     private void OnEnable()
     {
@@ -135,13 +165,29 @@ public class Player : MonoBehaviour
 
         HandleScoreAndSpeed();
         HandleForwardMovement();
-        HandleTouchInput();
+
+        if (canReadInput)
+            HandleTouchInput();
+
         HandleSmoothHorizontalMovement();
 
         HandleMagnet();
         HandleShield();
+        HandleHighJump();
     }
-
+    public void StartGame()
+    {
+        CurrentRunCoins = 0;
+        gameStarted = true;
+        playerActive = true;
+        print("Hehe here");
+        StartCoroutine(EnableInputAfterDelay());
+    }
+    IEnumerator EnableInputAfterDelay()
+    {
+        yield return new WaitForSeconds(0.2f); // 0.2 sec delay
+        canReadInput = true;
+    }
     void HandleSmoothHorizontalMovement()
     {
         // Smoothly move towards target position
@@ -256,12 +302,15 @@ public class Player : MonoBehaviour
 
         }
     }
-    private void ActivateMagnet()
+    public void ActivateMagnet()
     {
         magnetActive = true;
         magnetTimer = magnetDuration;
 
         magnetUI.SetActive(true);
+        coinVfx.gameObject.SetActive(true);
+        coinVfx.Play();
+        AudioManager.Instance.PlayCoinPickSound();
 
         magnetSlider.maxValue = magnetDuration;
         magnetSlider.value = magnetDuration;
@@ -275,21 +324,31 @@ public class Player : MonoBehaviour
 
         magnetSlider.value = magnetTimer;
 
-        // Create invisible rectangular detection area in front of player
+        // 3D Box around player (forward, left/right, up/down)
+        Vector3 boxCenter = transform.position + new Vector3(0, magnetRadiusY / 2f, magnetRadiusZ / 2f);
+
+        Vector3 boxSize = new Vector3(
+            magnetRadiusX,
+            magnetRadiusY,
+            magnetRadiusZ
+        );
+
         Collider[] hits = Physics.OverlapBox(
-            transform.position + new Vector3(0, 0, magnetRadiusZ / 2),
-            new Vector3(magnetRadiusX, 2f, magnetRadiusZ)
+            boxCenter,
+            boxSize,
+            Quaternion.identity
         );
 
         foreach (Collider hit in hits)
         {
             if (hit.CompareTag("Coin"))
             {
-                // Pull coin toward player
-                hit.transform.position = Vector3.MoveTowards(
-                    hit.transform.position,
-                    transform.position,
-                    20f * Time.deltaTime
+                Transform coin = hit.transform;
+
+                coin.position = Vector3.MoveTowards(
+                    coin.position,
+                    transform.position + Vector3.up * 1f, // attract toward chest height
+                    magnetPullSpeed * Time.deltaTime
                 );
             }
         }
@@ -300,13 +359,15 @@ public class Player : MonoBehaviour
             magnetUI.SetActive(false);
         }
     }
-    private void ActivateShield()
+    public void ActivateShield()
     {
         shieldActive = true;
         shieldTimer = shieldDuration;
 
         shieldUI.SetActive(true);
-
+        coinVfx.gameObject.SetActive(true);
+        coinVfx.Play();
+        AudioManager.Instance.PlayCoinPickSound();
         shieldSlider.maxValue = shieldDuration;
         shieldSlider.value = shieldDuration;
 
@@ -328,13 +389,46 @@ public class Player : MonoBehaviour
             shieldBubble.SetActive(false);
         }
     }
+
+    public void ActivateHighJump()
+    {
+        highJumpActive = true;
+        highJumpTimer = highJumpDuration;
+
+        highJumpUI.SetActive(true);
+        coinVfx.gameObject.SetActive(true);
+        coinVfx.Play();
+        AudioManager.Instance.PlayCoinPickSound();
+
+        highJumpSlider.maxValue = highJumpDuration;
+        highJumpSlider.value = highJumpDuration;
+    }
+    void HandleHighJump()
+    {
+        if (!highJumpActive) return;
+
+        highJumpTimer -= Time.deltaTime;
+        highJumpTimer = Mathf.Clamp(highJumpTimer, 0, highJumpDuration);
+
+        highJumpSlider.value = highJumpTimer;
+
+        if (highJumpTimer <= 0)
+        {
+            highJumpActive = false;
+            highJumpUI.SetActive(false);
+        }
+    }
     private void PlayCoinPickupVfx()
     {
         StopCoroutine(HandleCoinVfx());
         StartCoroutine(HandleCoinVfx());
     }
+    private int currentCoins = 0;
     IEnumerator HandleCoinVfx()
     {
+        currentCoins++;
+        CurrentRunCoins = currentCoins;
+        CoinsCollecd.Invoke(currentCoins);
         coinVfx.gameObject.SetActive(true);
         coinVfx.Play();
         yield return new WaitForSeconds(coinVfxDuration);
@@ -366,23 +460,29 @@ public class Player : MonoBehaviour
         if (coll.gameObject.tag == "ground")
         {
             jumpCount = 1;
-            isJumping = false;
-            //AudioManager.Instance.PlayJumpSound();
+            isJumping = false; 
+            isGrounded = true;
 
             if (anim != null)
                 anim.SetBool("Jump", false);
 
         }
 
+
         if (coll.gameObject.tag == "death")
         {
             if (shieldActive)
             {
                 Destroy(coll.gameObject); // break obstacle
+                destructionParticle.gameObject.SetActive(true);
+                destructionParticle.Play();
+                AudioManager.Instance.PlayDestroySound();
                 return;
             }
             pauseGo.active = false;
-
+            shieldUI.SetActive(false);
+            magnetUI.SetActive(false);
+            highJumpUI.SetActive(false);
             //coinSounds.GetComponentInChildren<CoinSounds>().deathSound();
             Instantiate(deathParticle, transform.position, Quaternion.Euler(90, 0, 0)); // FIX
             //Instantiate(deathParticle, characterPos, Quaternion.Euler(90, 0, 0));
@@ -412,7 +512,21 @@ public class Player : MonoBehaviour
         }
     }
 
+    void OnCollisionExit(Collision coll)
+    {
+        if (coll.gameObject.CompareTag("ground"))
+        {
+            isGrounded = false;
+        }
+    }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "confetti")
+        {
+            GameEventManager.OnPlayerReachedEnd();
+        }
+    }
     private void FixedUpdate()
     {
         //gravity
@@ -422,23 +536,62 @@ public class Player : MonoBehaviour
         //characterRGBD.AddForce(Vector3.down * 5, ForceMode.Impulse);
     }
 
+    //void characterJump()
+    //{
+    //    if (jumpCount > 3) return;
+
+    //    characterRGBD.linearVelocity = new Vector3(characterRGBD.linearVelocity.x, 10f, characterRGBD.linearVelocity.z);
+    //    isJumping = true;
+    //    AudioManager.Instance.PlayJumpSound();
+
+    //    if (anim != null)
+    //        anim.SetBool("Jump", true);
+
+    //    StartCoroutine(startWalkAnim(jumpCount));
+
+    //    jumpCount++;
+    //}
+
     void characterJump()
     {
+        print("Is hight jump active ?" + highJumpActive);
+        // HIGH JUMP ACTIVE
+        if (highJumpActive)
+        {
+            if (!isGrounded) return;
+
+            characterRGBD.linearVelocity = new Vector3(
+                characterRGBD.linearVelocity.x,
+                highJumpForce,
+                characterRGBD.linearVelocity.z
+            );
+
+            AudioManager.Instance.PlayJumpSound();
+
+            if (anim != null)
+                anim.SetBool("Jump", true);
+
+            return;
+        }
+
+        // NORMAL JUMP
         if (jumpCount > 3) return;
 
-        characterRGBD.linearVelocity = new Vector3(characterRGBD.linearVelocity.x, 10f, characterRGBD.linearVelocity.z);
+        characterRGBD.linearVelocity = new Vector3(
+            characterRGBD.linearVelocity.x,
+            normalJumpForce,
+            characterRGBD.linearVelocity.z
+        );
+
         isJumping = true;
+
         AudioManager.Instance.PlayJumpSound();
 
         if (anim != null)
             anim.SetBool("Jump", true);
 
-        StartCoroutine(startWalkAnim(jumpCount));
-
         jumpCount++;
     }
-
-
     public IEnumerator startWalkAnim(int count)
     {
         yield return new WaitForSeconds(0.4f * count);
@@ -453,5 +606,13 @@ public class Player : MonoBehaviour
 
 
 
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
 
+        Vector3 boxCenter = transform.position + new Vector3(0, magnetRadiusY / 2f, magnetRadiusZ / 2f);
+        Vector3 boxSize = new Vector3(magnetRadiusX, magnetRadiusY, magnetRadiusZ);
+
+        Gizmos.DrawWireCube(boxCenter, boxSize);
+    }
 }

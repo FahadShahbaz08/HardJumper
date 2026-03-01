@@ -15,8 +15,8 @@ namespace HardRunner.Others
 
         private float spawnZ;
         int currentLevel = 1;
-        int minimumLevelChunks = 2;
-        int chunksMultiplier = 2;
+        [SerializeField] private int baseChunks = 2;
+        [SerializeField] private int chunksMultiplier = 2;
 
         void Start()
         {
@@ -33,7 +33,7 @@ namespace HardRunner.Others
 
         private void SpawnChunk()
         {
-            int totalChunks = minimumLevelChunks * chunksMultiplier;
+            int totalChunks = baseChunks * chunksMultiplier;
 
             for (int i = 0; i < totalChunks; i++)
             {

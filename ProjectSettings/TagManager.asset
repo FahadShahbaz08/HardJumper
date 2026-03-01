@@ -11,6 +11,7 @@ TagManager:
   - Soundtg
   - end
   - Coin
+  - confetti
   layers:
   - Default
   - TransparentFX

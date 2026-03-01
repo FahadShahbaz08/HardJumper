@@ -18,6 +18,7 @@ namespace HardRunner.Economy
         private void OnTriggerEnter(Collider other)
         {
             Prefs.Coins++;
+            print("Current Coins " + Prefs.Coins);
             MOST_HapticFeedback.Generate(MOST_HapticFeedback.HapticTypes.LightImpact);
             gameObject.SetActive(false);
             GameEventManager.OnCoinCollected();

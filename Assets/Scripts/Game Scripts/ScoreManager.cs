@@ -26,8 +26,8 @@ public class ScoreManager : MonoBehaviour
 
     void Update()
     {
-        uiCoinsCollected.text = "" + intCoinsCollected;
-        intCoinsGot = intCoinsCollected;
+        //uiCoinsCollected.text = "" + intCoinsCollected;
+        //intCoinsGot = intCoinsCollected;
     }
     public static void AddCoins(int coinsToAdd)
     {

@@ -4,9 +4,11 @@ public class ShieldPickup : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<Player>())
+        Player player = other.GetComponent<Player>();
+
+        if (player != null)
         {
-            other.GetComponent<Player>().SendMessage("ActivateShield");
+            player.ActivateShield(); // DIRECT CALL
             Destroy(gameObject);
         }
     }

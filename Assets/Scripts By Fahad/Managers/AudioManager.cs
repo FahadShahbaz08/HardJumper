@@ -15,6 +15,10 @@ namespace HardRunner.Managers
         [SerializeField] AudioClip jumpSound;
         [SerializeField] AudioClip coinPickSound;
         [SerializeField] AudioClip deathSound;
+        [SerializeField] AudioClip claimSound;
+        [SerializeField] AudioClip uiClick;
+        [SerializeField] AudioClip destroySound;
+        [SerializeField] AudioClip confettiSound;
 
         [Header("Sources")]
         [SerializeField] private AudioSource musicSource;
@@ -122,6 +126,30 @@ namespace HardRunner.Managers
             sfxSource.PlayOneShot(deathSound);
         }
 
+
+        public void PlayClaimSound()
+        {
+            if (IsSfxEnabled())
+                sfxSource.PlayOneShot(claimSound);
+        }
+
+        public void PlayUiClickSound()
+        {
+            if (IsSfxEnabled())
+                sfxSource.PlayOneShot(uiClick);
+        }
+
+        public void PlayDestroySound()
+        {
+            if (IsSfxEnabled())
+                sfxSource.PlayOneShot(destroySound);
+        }
+        public void PlayConffetiSound()
+        {
+            if (IsSfxEnabled())
+                sfxSource.PlayOneShot(confettiSound);
+        }
+
         // ================= SETTINGS =================
 
         public void SetMusicEnabled(bool enabled)
@@ -148,5 +176,6 @@ namespace HardRunner.Managers
         {
             return HardRunner.Economy.Prefs.SfxEnabled;
         }
+
     }
 }

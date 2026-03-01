@@ -4,9 +4,11 @@ public class MagnetPickup : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<Player>())
+        Player player = other.GetComponent<Player>();
+
+        if (player != null)
         {
-            other.GetComponent<Player>().SendMessage("ActivateMagnet");
+            player.ActivateMagnet(); // DIRECT CALL
             Destroy(gameObject);
         }
     }
